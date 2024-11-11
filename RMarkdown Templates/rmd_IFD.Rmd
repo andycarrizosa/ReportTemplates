@@ -24,7 +24,7 @@ if(any(contDVs!="")){
                                     subgroups = subgroups[n],
                                     comb="perm",
                                     clust=clust)
-                     print(paste0("CONT",subgroups[n], "_", contDVs[i]))
+                     print(paste0("Continuous DV: ", binDVs[i], ", By: ", ifelse(subgroups[n]=="", "Full Sample", subgroups[n])))
                      print(out[[x]][[4]])
      
                      write.csv(out[[x]][[2]], paste0("./all_outputs/",subgroups[n], "_", contDVs[i], ".csv"))
@@ -53,7 +53,7 @@ if(any(binDVs!="")){
                                     subgroups = subgroups[n],
                                     comb="perm",
                                     clust=clust)
-                     print(paste0("Binary DV: ", binDVs[i], "\nBy: ", subgroups[n]))
+                     print(paste0("Binary DV: ", binDVs[i], ", By: ", ifelse(subgroups[n]=="", "Full Sample", subgroups[n])))
                      print(out[[x]][[4]])
      
                      write.csv(out[[x]][[2]], paste0("./all_outputs/",subgroups[n], "_", binDVs[i], ".csv"))
