@@ -8,12 +8,16 @@ chunk_output_type: console
 ---
 # Continuous Results for Summaries
 
-```{r contresults2, echo = FALSE, message = FALSE,warning=F, fig.width=8,fig.height=6}
+```{r contresults2, echo = FALSE, message = FALSE,warning=F, fig.width=8,fig.height=6, results='asis'}
 dir.create("./all_outputs", showWarnings=F)
 if(any(contDVs!="")){
      out<-list()
      x<-1
      for(n in 1:length(subgroups)){
+          grpcat<-ifelse(subgroups[n]=="", "Full Sample", subgroups[n])
+          cat(sprintf("## %s\n\n", grpcat))
+          cat("\n\n")
+          
              for(i in 1:length(contDVs)){
                      
                      out[[x]]<-TreatmentEffects(mydata, treats=treatment, 
@@ -24,9 +28,12 @@ if(any(contDVs!="")){
                                     subgroups = subgroups[n],
                                     comb="perm",
                                     clust=clust)
-                     print(paste0("Continuous DV: ", contDVs[i], ", By: ", ifelse(subgroups[n]=="", "Full Sample", subgroups[n])))
+                     
+                     outnames<-paste0("DV: ", contDVs[i])
+                     cat(sprintf("### %s\n\n", outnames))
                      print(out[[x]][[4]])
-     
+                     cat("\n\n\n[Back to Table of Contents](#TOC)\n\n")
+                     
                      write.csv(out[[x]][[2]], paste0("./all_outputs/",subgroups[n], "_", contDVs[i], ".csv"))
                      x<-x+1
                      }
@@ -34,14 +41,20 @@ if(any(contDVs!="")){
 } 
 ```
 
+[Back to title](#TOC)
+
 # Binary Results for Summaries
 
-```{r binresults, echo = FALSE, message = FALSE,warning=F, fig.width=8,fig.height=6}
+```{r binresults, echo = FALSE, message = FALSE,warning=F, fig.width=8,fig.height=6, results='asis'}
 dir.create("./all_outputs", showWarnings=F)
 if(any(binDVs!="")){
      out<-list()
      x<-1
      for(n in 1:length(subgroups)){
+          grpcat<-ifelse(subgroups[n]=="", "Full Sample", subgroups[n])
+          cat(sprintf("## %s\n\n", grpcat))
+          cat("\n\n")
+          
              for(i in 1:length(binDVs)){
      
                      out[[x]]<-TreatmentEffects(mydata,
@@ -53,13 +66,16 @@ if(any(binDVs!="")){
                                     subgroups = subgroups[n],
                                     comb="perm",
                                     clust=clust)
-                     print(paste0("Binary DV: ", binDVs[i], ", By: ", ifelse(subgroups[n]=="", "Full Sample", subgroups[n])))
+                     outnames<-paste0("DV: ", binDVs[i])
+                     cat(sprintf("### %s\n\n", outnames))
                      print(out[[x]][[4]])
+                     cat("\n\n\n[Back to Table of Contents](#TOC)\n\n")
      
                      write.csv(out[[x]][[2]], paste0("./all_outputs/",subgroups[n], "_", binDVs[i], ".csv"))
                      x<-x+1
                      }
      }
+
 }
 
 ```
