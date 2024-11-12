@@ -21,7 +21,8 @@ if(any(contDVs!="")){
           
              for(i in 1:length(contDVs)){
                      
-                     out[[x]]<-TreatmentEffects(mydata, treats=treatment, 
+                  ph<-mydata[!is.na(mydata[contDVs[i]]),]
+                     out[[x]]<-TreatmentEffects(ph, treats=treatment, 
                                      DV=contDVs[i], 
                                      model="linear",
                                     controls=covariates,
@@ -62,8 +63,10 @@ if(any(binDVs!="")){
           cat("\n\n")
           
              for(i in 1:length(binDVs)){
+                  
+                  ph<-mydata[!is.na(mydata[binDVs[i]]),]
      
-                     out[[x]]<-TreatmentEffects(mydata,
+                     out[[x]]<-TreatmentEffects(ph,
                                               treats=treatment,
                                      DV=binDVs[i],
                                      model="logit",
