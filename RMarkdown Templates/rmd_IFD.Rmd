@@ -12,6 +12,7 @@ chunk_output_type: console
 dir.create("./all_outputs", showWarnings=F)
 if(any(contDVs!="")){
      out<-list()
+     outdat<-list()
      x<-1
      for(n in 1:length(subgroups)){
           grpcat<-ifelse(subgroups[n]=="", "Full Sample", subgroups[n])
@@ -34,14 +35,18 @@ if(any(contDVs!="")){
                      print(out[[x]][[4]])
                      cat("\n\n\n[Back to Table of Contents](#TOC)\n\n")
                      
-                     write.csv(out[[x]][[2]], paste0("./all_outputs/",subgroups[n], "_", contDVs[i], ".csv"))
+                     outdat[[x]]<-out[[x]][[2]]
+                     rownames(outdat[[x]])<-NULL
+                     if(!any(names(outdat[[x]])=="group")){
+                          outdat[[x]]$group<-"Full Sample"
+                          outdat[[x]]<-outdat[[x]][c("min", "med", "max", "group", "treat", "conf", "signif_dif", "DV")]
+                     }
                      x<-x+1
                      }
      }
+     outdat1<-do.call(rbind, outdat)
 } 
 ```
-
-[Back to title](#TOC)
 
 # Binary Results for Summaries
 
@@ -49,6 +54,7 @@ if(any(contDVs!="")){
 dir.create("./all_outputs", showWarnings=F)
 if(any(binDVs!="")){
      out<-list()
+     outdat<-list()
      x<-1
      for(n in 1:length(subgroups)){
           grpcat<-ifelse(subgroups[n]=="", "Full Sample", subgroups[n])
@@ -71,12 +77,28 @@ if(any(binDVs!="")){
                      print(out[[x]][[4]])
                      cat("\n\n\n[Back to Table of Contents](#TOC)\n\n")
      
-                     write.csv(out[[x]][[2]], paste0("./all_outputs/",subgroups[n], "_", binDVs[i], ".csv"))
+                    outdat[[x]]<-out[[x]][[2]]
+                     rownames(outdat[[x]])<-NULL
+                     if(!any(names(outdat[[x]])=="group")){
+                          outdat[[x]]$group<-"Full Sample"
+                          outdat[[x]]<-outdat[[x]][c("min", "med", "max", "group", "treat", "conf", "signif_dif", "DV")]
+                     }
                      x<-x+1
                      }
      }
-
+     outdat2<-do.call(rbind, outdat)
 }
+
+if(any(ls()=="outdat1") & any(ls()=="outdat2")){
+     alldat<-rbind(outdat1, outdat2)
+     write.csv(alldat, "./all_outputs/all_IDF_preds.csv")
+}
+if(any(ls()=="outdat1") & !any(ls()=="outdat2")){
+     write.csv(outdat1, "./all_outputs/all_IDF_preds.csv")
+} 
+if(!any(ls()=="outdat1") & any(ls()=="outdat2")){
+     write.csv(outdat2, "./all_outputs/all_IDF_preds.csv")
+} 
 
 ```
 
