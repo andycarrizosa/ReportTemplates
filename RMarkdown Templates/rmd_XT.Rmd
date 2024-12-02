@@ -1,0 +1,81 @@
+---
+title: "PLACEHOLDER"
+output:
+  html_document:
+    toc: true
+    theme: united
+chunk_output_type: console
+---
+# Top-level results
+
+```{r toplevel, echo = FALSE, message = FALSE,warning=F, fig.width=10,fig.height=7, results='asis'}
+
+out<-XT(dat,DV)
+
+for(i in 1:length(out)){
+               grpcat<-DV[i]
+               base::cat(sprintf("## %s\n\n", grpcat))
+               base::cat("\n\n")
+               
+             p<-ggplot(out[[i]], aes(x=Var1, y=value))+
+                geom_bar(position="dodge", stat="identity")+
+                theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+                labs(x="",
+                     y="Prop.")+
+                theme_minimal()+
+                scale_x_discrete(labels = function(x) str_wrap(x, width = 10))+
+                geom_text(aes(label=round(value,2)),
+            position = position_dodge(width = .9), show.legend=F, vjust=1.5)
+        print(p)
+
+        
+        base::cat("\n\n\n[Back to Table of Contents](#TOC)\n\n")
+}
+
+```
+
+# Results by subgroups
+
+```{r subgroups, echo = FALSE, message = FALSE,warning=F, fig.width=10,fig.height=7, results='asis'}
+if(any(subgroups!="")){
+     out<-XT(dat,DV=DV, subgroups=subgroups)
+     
+     for(i in 1:length(out)){
+          grpcat<-names(out)[i]
+          base::cat(sprintf("## %s\n\n", grpcat))
+          base::cat("\n\n")
+          for(n in 1:length(out[[i]])){
+               ph<-out[[i]][[n]] %>% melt
+               sb<-names(out[[i]])[n] %>% strsplit("_X_") %>% unlist
+               sb<-sb[2]
+               
+               base::cat(sprintf("### %s\n\n", sb))
+               base::cat("\n\n")
+               
+               p<-ggplot(ph, aes(x=Var1, y=value, fill=variable))+
+                     geom_bar(position="dodge", stat="identity")+
+                     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+                     labs(x="",
+                          y="Prop.",
+                          fill=sb)+
+                     theme_minimal()+
+                     scale_x_discrete(labels = function(x) str_wrap(x, width = 10))+
+                     geom_text(aes(label=round(value,2)),
+                 position = position_dodge(width = .9), show.legend=F, vjust=1.5)
+             print(p)
+             
+             base::cat("\n\n\n[Back to Table of Contents](#TOC)\n\n")
+               
+          }
+     }
+}
+
+
+
+
+
+
+```
+
+
+
