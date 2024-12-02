@@ -10,7 +10,7 @@ chunk_output_type: console
 
 ```{r toplevel, echo = FALSE, message = FALSE,warning=F, fig.width=10,fig.height=7, results='asis'}
 
-out<-XT(dat,DV)
+out<-XT(dat,DV, wt=wt)
 
 for(i in 1:length(out)){
                grpcat<-DV[i]
@@ -38,7 +38,7 @@ for(i in 1:length(out)){
 
 ```{r subgroups, echo = FALSE, message = FALSE,warning=F, fig.width=10,fig.height=7, results='asis'}
 if(any(subgroups!="")){
-     out<-XT(dat,DV=DV, subgroups=subgroups)
+     out<-XT(dat,DV=DV, subgroups=subgroups, wt=wt)
      
      for(i in 1:length(out)){
           grpcat<-names(out)[i]
