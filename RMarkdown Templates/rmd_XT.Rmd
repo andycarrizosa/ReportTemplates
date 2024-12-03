@@ -12,6 +12,8 @@ chunk_output_type: console
 
 out<-XT(dat,DV, wt=wt)
 
+dir.create("./all_outputs", showWarnings=F)
+
 for(i in 1:length(out)){
                grpcat<-DV[i]
                base::cat(sprintf("## %s\n\n", grpcat))
@@ -27,7 +29,8 @@ for(i in 1:length(out)){
                 geom_text(aes(label=round(value,2)),
             position = position_dodge(width = .9), show.legend=F, vjust=1.5)
         print(p)
-
+        
+        write.csv(out[[i]], paste0("./all_outputs/", grpcat, ".csv"))
         
         base::cat("\n\n\n[Back to Table of Contents](#TOC)\n\n")
 }
@@ -63,6 +66,9 @@ if(any(subgroups!="")){
                      geom_text(aes(label=round(value,2)),
                  position = position_dodge(width = .9), show.legend=F, vjust=1.5)
              print(p)
+             
+             write.csv(ph, paste0("./all_outputs/", grpcat, "_X_", sb, ".csv"))
+             
              
              base::cat("\n\n\n[Back to Table of Contents](#TOC)\n\n")
                
