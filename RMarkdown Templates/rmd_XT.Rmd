@@ -5,6 +5,8 @@ output:
     toc: true
     theme: united
 chunk_output_type: console
+editor_options: 
+  chunk_output_type: console
 ---
 # Top-level results
 
@@ -30,7 +32,10 @@ for(i in 1:length(out)){
             position = position_dodge(width = .9), show.legend=F, vjust=1.5)
         print(p)
         
-        write.csv(out[[i]], paste0("./all_outputs/", grpcat, ".csv"))
+        keep<-cbind(names(out)[i], out[[i]])
+        names(keep)[1:2]<-c("Question", "Answer_level")
+        
+        write.csv(keep, paste0("./all_outputs/", grpcat, ".csv"))
         
         base::cat("\n\n\n[Back to Table of Contents](#TOC)\n\n")
 }
@@ -48,7 +53,8 @@ if(any(subgroups!="")){
           base::cat(sprintf("## %s\n\n", grpcat))
           base::cat("\n\n")
           for(n in 1:length(out[[i]])){
-               ph<-out[[i]][[n]] %>% melt
+               ph<-out[[i]][[n]] %>% melt(id="Var1")
+               ph$value<-ph$value %>% as.numeric
                sb<-names(out[[i]])[n] %>% strsplit("_X_") %>% unlist
                sb<-sb[2]
                
@@ -67,8 +73,9 @@ if(any(subgroups!="")){
                  position = position_dodge(width = .9), show.legend=F, vjust=1.5)
              print(p)
              
-             write.csv(ph, paste0("./all_outputs/", grpcat, "_X_", sb, ".csv"))
-             
+             keep<-cbind(names(out[[i]])[n], out[[i]][n][[1]])
+             names(keep)[1:2]<-c("Question", "Answer_level")
+             write.csv(keep, paste0("./all_outputs/", grpcat, "_X_", sb, ".csv"))
              
              base::cat("\n\n\n[Back to Table of Contents](#TOC)\n\n")
                
