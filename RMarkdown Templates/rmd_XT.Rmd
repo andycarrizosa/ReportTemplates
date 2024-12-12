@@ -12,7 +12,7 @@ editor_options:
 
 ```{r toplevel, echo = FALSE, message = FALSE,warning=F, fig.width=10,fig.height=7, results='asis'}
 
-out<-XT(dat,DV, wt=wt)
+out<-XT(dat,DV, wt=wt, model=model)
 
 dir.create("./all_outputs", showWarnings=F)
 
@@ -35,7 +35,7 @@ for(i in 1:length(out)){
         keep<-cbind(names(out)[i], out[[i]])
         names(keep)[1:2]<-c("Question", "Answer_level")
         
-        write.csv(keep, paste0("./all_outputs/", grpcat, ".csv"))
+        write.csv(keep, paste0("./all_outputs/",model,"_", grpcat, ".csv"))
         
         base::cat("\n\n\n[Back to Table of Contents](#TOC)\n\n")
 }
@@ -46,7 +46,7 @@ for(i in 1:length(out)){
 
 ```{r subgroups, echo = FALSE, message = FALSE,warning=F, fig.width=10,fig.height=7, results='asis'}
 if(any(subgroups!="")){
-     out<-XT(dat,DV=DV, subgroups=subgroups, wt=wt)
+     out<-XT(dat,DV=DV, subgroups=subgroups, wt=wt, model=model)
      
      for(i in 1:length(out)){
           grpcat<-names(out)[i]
@@ -75,7 +75,7 @@ if(any(subgroups!="")){
              
              keep<-cbind(names(out[[i]])[n], out[[i]][n][[1]])
              names(keep)[1:2]<-c("Question", "Answer_level")
-             write.csv(keep, paste0("./all_outputs/", grpcat, "_X_", sb, ".csv"))
+             write.csv(keep, paste0("./all_outputs/",model,"_", grpcat, "_X_", sb, ".csv"))
              
              base::cat("\n\n\n[Back to Table of Contents](#TOC)\n\n")
                
