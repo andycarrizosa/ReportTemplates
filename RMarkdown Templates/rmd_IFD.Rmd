@@ -5,6 +5,8 @@ output:
     toc: true
     theme: united
 chunk_output_type: console
+editor_options: 
+  chunk_output_type: console
 ---
 # Continuous Results for Summaries
 
@@ -42,8 +44,11 @@ if(any(contDVs!="")){
                           outdat[[x]]$group<-"Full Sample"
                           outdat[[x]]<-outdat[[x]][c("min", "med", "max", "group", "treat", "conf", "signif_dif", "DV")]
                      }
+                     outdat[[x]]$grpcat<-grpcat
+                     
                      x<-x+1
-                     }
+             }
+          
      }
      outdat1<-do.call(rbind, outdat)
 } 
@@ -86,6 +91,7 @@ if(any(binDVs!="")){
                           outdat[[x]]$group<-"Full Sample"
                           outdat[[x]]<-outdat[[x]][c("min", "med", "max", "group", "treat", "conf", "signif_dif", "DV")]
                      }
+                     outdat[[x]]$grpcat<-grpcat
                      x<-x+1
                      }
      }
