@@ -82,11 +82,15 @@ if(any(subgroups!="")){
              print(p)
              
              keep<-cbind(grpcat, out[[i]][n][[1]])
+             
+             ph<-questionr::wtd.table(x=dat[,sb], weights=dat[,wt])
+             ph<-ph[colnames(keep)[-1:-2]]
+             
              colnames(keep)[-1:-2]<-paste0(sb, "_",colnames(keep)[-1:-2])
              
              names(keep)[1:2]<-c("DV", "answer_level")
              keep$answer_level<-keep$answer_level %>% as.character
-             keep[nrow(keep)+1,]<-c(grpcat, "N Total=", questionr::wtd.table(x=dat[,sb], weights=dat[,wt]))
+             keep[nrow(keep)+1,]<-c(grpcat, "N Total=", ph)
              keeplist2[[n]]<-keep
              base::cat("\n\n\n[Back to Table of Contents](#TOC)\n\n")
           }
