@@ -12,6 +12,10 @@ editor_options:
 
 ```{r toplevel, echo = FALSE, message = FALSE,warning=F, fig.width=10,fig.height=7, results='asis'}
 
+if(all(names(dat)!=wt)){
+     dat[wt]<-1
+}
+
 out<-XT(dat,DV, wt=wt, model=model)
 
 dir.create("./all_outputs", showWarnings=F)
@@ -36,7 +40,7 @@ for(i in 1:length(out)){
         keep<-cbind(names(out)[i], out[[i]])
         names(keep)[1:2]<-c("DV", "answer_level")
         keep$answer_level<-keep$answer_level %>% as.character
-        keep[nrow(keep)+1,]<-c(grpcat, "N Total=", nrow(dat))
+        keep[nrow(keep)+1,]<-c(grpcat, "N Total=", sum(dat[wt]))
         keeplist[[i]]<-keep
         
         base::cat("\n\n\n[Back to Table of Contents](#TOC)\n\n")
@@ -82,7 +86,7 @@ if(any(subgroups!="")){
              
              names(keep)[1:2]<-c("DV", "answer_level")
              keep$answer_level<-keep$answer_level %>% as.character
-             keep[nrow(keep)+1,]<-c(grpcat, "N Total=", dat[sb] %>% table)
+             keep[nrow(keep)+1,]<-c(grpcat, "N Total=", questionr::wtd.table(x=dat[,sb], weights=dat[,wt]))
              keeplist2[[n]]<-keep
              base::cat("\n\n\n[Back to Table of Contents](#TOC)\n\n")
           }
@@ -109,12 +113,6 @@ for(i in 1:length(keeplist)){
            write.csv(keeplist[[i]], paste0("./all_outputs/", names(out)[i], ".csv"))
      }
 }
-
-
-
-
-
-
 
 
 
