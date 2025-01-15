@@ -12,9 +12,11 @@ editor_options:
 
 ```{r toplevel, echo = FALSE, message = FALSE,warning=F, fig.width=10,fig.height=7, results='asis'}
 
-if(all(names(dat)!=wt)){
-     dat[wt]<-1
-}
+        if(all(colnames(dat)!=wt)){
+                dat[ncol(dat)+1]<-1
+                names(dat)[ncol(dat)]<-"noweight"
+                wt<-"noweight"
+        }
 
 out<-XT(dat,DV, wt=wt, model=model)
 
@@ -26,6 +28,8 @@ for(i in 1:length(out)){
                base::cat(sprintf("## %s\n\n", grpcat))
                base::cat("\n\n")
                
+               out[[i]]$Var1<-out[[i]]$Var1 %>% ordered(.,out[[i]]$Var1)
+               
              p<-ggplot(out[[i]], aes(x=Var1, y=value))+
                 geom_bar(position="dodge", stat="identity")+
                 theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
@@ -34,7 +38,7 @@ for(i in 1:length(out)){
                 theme_minimal()+
                 scale_x_discrete(labels = function(x) str_wrap(x, width = 10))+
                 geom_text(aes(label=round(value,2)),
-            position = position_dodge(width = .9), show.legend=F, vjust=1.5)
+            position = position_dodge(width = .9), show.legend=T, vjust=1.5)
         print(p)
         
         keep<-cbind(names(out)[i], out[[i]])
@@ -62,6 +66,7 @@ if(any(subgroups!="")){
           base::cat("\n\n")
           for(n in 1:length(out[[i]])){
                ph<-out[[i]][[n]] %>% melt(id="Var1")
+               ph$Var1<-ph$Var1 %>% ordered(.,sort(unique(ph$Var1)))
                ph$value<-ph$value %>% as.numeric
                sb<-names(out[[i]])[n] %>% strsplit("_X_") %>% unlist
                sb<-sb[2]
