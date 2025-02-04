@@ -100,12 +100,19 @@ if(any(subgroups!="")){
              keeplist2[[n]]<-keep
              base::cat("\n\n\n[Back to Table of Contents](#TOC)\n\n")
           }
-          keeplist3<-keeplist2[[1]]
+          
+          if(length(keeplist2)>1){
+                         keeplist3<-keeplist2[[1]]
           for(n in 2:length(keeplist2)){
                keeplist3<-merge(keeplist3, keeplist2[[n]], by.x=c("DV", "answer_level"), by.y=c("DV", "answer_level"))
           }
+                         allkeep[[i]]<-keeplist3
+          }else{
+               allkeep[[i]]<-keeplist2
+          }
+
           
-          allkeep[[i]]<-keeplist3
+          
      }
      
      finalkeep<-list()
