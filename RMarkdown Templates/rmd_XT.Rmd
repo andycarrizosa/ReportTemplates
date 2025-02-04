@@ -115,13 +115,13 @@ if(any(subgroups!="")){
      }
 }
 
-
-for(i in 1:length(keeplist)){
-     if(any(subgroups!="")){
-          write.csv(finalkeep[[i]], paste0("./all_outputs/", names(out)[i], ".csv"))
-     }else{
-           write.csv(keeplist[[i]], paste0("./all_outputs/", names(out)[i], ".csv"))
-     }
+if(any(subgroups!="")){
+     finalkeep<-do.call(rbind, finalkeep)
+     
+     write.csv(finalkeep, paste0("./all_outputs/", "PLACEHOLDER", ".csv"))
+}else{
+     keeplist<-do.call(rbind, keeplist)
+     write.csv(keeplist, paste0("./all_outputs/", "PLACEHOLDER", ".csv"))
 }
 
 
